@@ -1,7 +1,10 @@
-import Clock from './Clock.vue';
+import * as components from './components'
 
 module.exports = {
-  install: function (Vue, options) {
-    Vue.component('vue-clock', Clock);
+  install: (Vue, options = {}) => {
+    // Register global components
+    for (let component in components) {
+      Vue.component(component, components[component])
+    }
   }
 };
