@@ -1,22 +1,22 @@
-const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 var config = {
   output: {
     path: path.resolve(__dirname + '/dist/'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         include: __dirname,
         exclude: /node_modules/
       },
       {
         test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue-loader'
       },
       {
         test: /\.css$/,
@@ -28,17 +28,16 @@ var config = {
     moment: 'moment'
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin( {
-      minimize : true,
-      sourceMap : false,
-      mangle: true,
-      compress: {
-        warnings: false
-      }
-    } )
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        compress: {
+          warnings: false
+        },
+      },
+      sourceMap: true
+    })
   ]
 };
-
 
 module.exports = [
   merge(config, {
@@ -50,7 +49,7 @@ module.exports = [
     }
   }),
   merge(config, {
-    entry: path.resolve(__dirname + '/src/Clock.vue'),
+    entry: path.resolve(__dirname + '/src/components/Clock.vue'),
     output: {
       filename: 'vue-clock.js',
       libraryTarget: 'umd',
